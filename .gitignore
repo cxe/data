@@ -1,4 +1,14 @@
 *.log
 *.tgz
 .DS_Store
-tmp
+Thumbs.db
+.idea/
+.vscode/
+node_modules/
+*.tmp
+*.bak
+*.swp
+*.pid
+*.index.*
+/tmp
+

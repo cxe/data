@@ -1,10 +1,10 @@
 {
-    "name": "@cxe/app",
-    "version": "0.3.2",
+    "name": "@cxe/data",
+    "version": "0.4.0",
     "description": "",
     "keywords": [],
     "author": "Ian Carter <dev@cxe.io>",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "private": false,
     "main": "index.js",
     "scripts": {
@@ -14,18 +14,15 @@
         "release": "npm publish --access public"
     },
     "type": "module",
-    "bin": {
-        "app": "./app"
-    },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/cxe/app.git"
+        "url": "git+https://github.com/cxe/data.git"
     },
     "publishConfig": {
         "access": "public"
     },
     "bugs": {
-        "url": "https://github.com/cxe/app/issues"
+        "url": "https://github.com/cxe/data/issues"
     },
     "jest": {
         "coverageDirectory": "tmp/coverage",
@@ -35,8 +32,13 @@
             "<rootDir>/tmp/"
         ]
     },
-    "homepage": "https://github.com/cxe/app#readme",
+    "homepage": "https://github.com/cxe/data#readme",
     "engines": {
-        "node": "18.12.0"
+        "node": "22"
+    },
+    "exports": {
+        ".": "./index.js",
+        "./source/*": "./source/*.source.js",
+        "./package.json": "./package.json"
     }
 }

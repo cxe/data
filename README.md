@@ -1,5 +1,5 @@
-# @cxe/app
+# @cxe/data
 
-NodeJS application utility framework
+NodeJS data access and collection
 
-![npm](https://img.shields.io/npm/v/@cxe/app)
+![npm](https://img.shields.io/npm/v/@cxe/data)

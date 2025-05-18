@@ -1,2 +1,5 @@
 __tests__
 tmp
+.git
+node_modules
+.gitignore
