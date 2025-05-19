@@ -1,8 +1,8 @@
 {
     "name": "@cxe/data",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "",
-    "keywords": [],
+    "keywords": ["data"],
     "author": "Ian Carter <dev@cxe.io>",
     "license": "MIT",
     "private": false,

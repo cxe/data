@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { existsSync } from 'node:fs';
 import { readdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -18,6 +19,38 @@ const methods = {
     },
     async save(filename, text=''){
         writeFile(filename, text, 'utf8');
+    },
+    async index(data){
+        const index = {};
+        for (const id in data) {
+            const item = data[id];
+            for (const field in item) {
+                const value = item[field];
+                index[field] ||= {name: field, unique: true, id: {}};
+                const key = String(value || '').toUpperCase(); 
+                if (key) {
+                    if (key in index[field].id) {
+                        if (Array.isArray(index[field].id[key])) {
+                            index[field].id[key].push(id);
+                        } else if (index[field].id[key] !== id) {
+                            index[field].unique = false;
+                            for (const k in index[field].id) {
+                                if (Array.isArray(index[field].id[k])) continue;
+                                index[field].id[k] = [index[field].id[k]];
+                            }
+                            index[field].id[key].push(id);
+                        }
+                    } else {
+                        index[field].id[key] = id;
+                    }
+                }
+            }
+        }
+        for (const field in index) {
+            index[field].id = Object.assign({}, ...Object.keys(index[field].id).sort().map(id => ({[id]: index[field].id[id]})));
+            const indexFile = `${this.parentPath}/${this.name}/${this.name}.index.${field}.json`;
+            await this.save(indexFile, JSON.stringify(index[field], null, 2));
+        }
     }
 };
 
