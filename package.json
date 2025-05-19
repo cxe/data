@@ -1,8 +1,8 @@
 {
     "name": "@cxe/data",
-    "version": "0.4.1",
-    "description": "",
-    "keywords": ["data"],
+    "version": "0.4.2",
+    "description": "aggregated datasets and utilities",
+    "keywords": ["data", "airport", "country", "timezone"],
     "author": "Ian Carter <dev@cxe.io>",
     "license": "MIT",
     "private": false,

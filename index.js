@@ -51,6 +51,9 @@ const methods = {
             const indexFile = `${this.parentPath}/${this.name}/${this.name}.index.${field}.json`;
             await this.save(indexFile, JSON.stringify(index[field], null, 2));
         }
+    },
+    expired(){
+        return ! existsSync(this.datafile);
     }
 };
 
