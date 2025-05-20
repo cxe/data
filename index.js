@@ -11,14 +11,31 @@ Object.defineProperties(globalThis, {
 
 const methods = {
     async download(url, filename=''){
-        const response = await fetch(url);
+        const request = {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            credentials: 'omit',
+            url,
+            headers: {
+                'Accept': 'application/json'
+            }
+        };
+        const response = await fetch(url, request);
         if (!response.ok) throw new Error(`GET ${url} failed ${response.status} ${response.statusText}`);
+        /*
+        const contentType = response.headers.get('content-type');
+        if (!contentType.includes('application/json')) {
+            throw new Error(`GET ${url} returned ${contentType} expected application/json`);
+        }*/
         const data = await response.json();
         if (filename) await this.save(filename, JSON.stringify(data, null, 2));
         return data;
     },
-    async save(filename, text=''){
-        writeFile(filename, text, 'utf8');
+    async save(filename, text='', encoding='utf8'){
+        await writeFile(filename, text, encoding);
     },
     async index(data){
         const index = {};
