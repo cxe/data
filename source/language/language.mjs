@@ -14,7 +14,7 @@ export async function setup(source){
                 data[code][lang] = tmp[code];
             }
         }
-        source.save(source.datafile, JSON.stringify(data, null, 2));
+        await source.save(source.datafile, JSON.stringify(data, null, 2));
         await source.index(data);
     }
 }
