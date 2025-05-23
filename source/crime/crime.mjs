@@ -1,0 +1,992 @@
+/**
+ * @see UN ICCS
+ * - https://www.unodc.org/unodc/en/data-and-analysis/statistics/iccs.html
+ * - https://ec.europa.eu/eurostat/databrowser/view/crim_off_cat/default/table?lang=en
+ * - https://dataunodc.un.org/dp-crime-violent-offences
+ * @see FBI CDE
+ * - https://www.justice.gov/data.json
+ * - https://www.justice.gov/developer
+ * - https://cde.ucr.cjis.gov/LATEST/webapp/#/pages/home
+ * - https://catalog.data.gov/dataset?tags=crime
+ * - https://www.dni.gov/index.php/who-we-are/organizations/ic-cio/ic-technical-specifications
+ * @see SLTD (Stolen and Lost Travel Documents) database
+ * - https://www.icao.int/Meetings/TAG-MRTD/Documents/Tag-Mrtd-18/Interpol.pdf
+ * - https://www.interpol.int/How-we-work/Border-management/SLTD-database-travel-and-identity-documents
+ * @see BKA
+ * - https://www.bka.de/EN/CurrentInformation/Statistics/PoliceCrimeStatistics/policecrimestatistics_node.html
+ * @see UK Police
+ * - https://data.police.uk/docs/
+ * 
+ * https://www.internationalcrimesdatabase.org/
+ * https://github.com/jgrospe92/crimes-api
+ * https://www.worldindata.com/api/crimeometer-crime-incidents-api/
+ * https://api.crimeometer.com/v1/incidents/crowdsourced-raw-data?lat=&lon=&distance=&datetime_ini=&datetime_end=&page=
+ */
+export async function setup(source){
+    if (source.expired()) {
+        const data = {
+            "100000":{
+                "en":"10 Acts against the natural environment"
+            },
+            "100100":{
+                "en":"1001 Acts that cause environmental pollution or degradation"
+            },
+            "100110":{
+                "en":"10011 Acts that cause the pollution or degradation of air"
+            },
+            "100120":{
+                "en":"10012 Acts that cause the pollution or degradation of water"
+            },
+            "100130":{
+                "en":"10013 Acts that cause the pollution or degradation of soil"
+            },
+            "100190":{
+                "en":"10019 Other acts that cause environmental pollution or degradation"
+            },
+            "100200":{
+                "en":"1002 Acts involving the movement or dumping of waste"
+            },
+            "100210":{
+                "en":"10021 Acts involving the movement or dumping of waste within national borders"
+            },
+            "100220":{
+                "en":"10022 Acts involving the movement or dumping of waste across national borders"
+            },
+            "100300":{
+                "en":"1003 Trade or possession of protected or prohibited species of fauna and flora"
+            },
+            "100310":{
+                "en":"10031 Trade or possession of protected species of wild fauna and flora"
+            },
+            "100311":{
+                "en":"100311 Trade or possession of protected species within national borders"
+            },
+            "100312":{
+                "en":"100312 Trafficking of protected species across national borders"
+            },
+            "100320":{
+                "en":"10032 Trade or possession of prohibited or controlled species of animals"
+            },
+            "100390":{
+                "en":"10039 Other trade or possession of protected or prohibited species of fauna and flora"
+            },
+            "100400":{
+                "en":"1004 Acts that result in the depletion or degradation of natural resources"
+            },
+            "100410":{
+                "en":"10041 Illegal logging"
+            },
+            "100420":{
+                "en":"10042 Illegal hunting, fishing or gathering of wild fauna and flora"
+            },
+            "100430":{
+                "en":"10043 Illegal mining"
+            },
+            "100490":{
+                "en":"10049 Other acts that result in the depletion or degradation of natural resources"
+            },
+            "100900":{
+                "en":"1009 Other acts against the natural environment"
+            },
+            "100910":{
+                "en":"10091 Acts against animals"
+            },
+            "100990":{
+                "en":"10099 Other acts against the natural environment"
+            },
+            "110000":{
+                "en":"11 Other criminal acts not elsewhere classified"
+            },
+            "110100":{
+                "en":"1101 Acts under universal jurisdiction"
+            },
+            "110110":{
+                "en":"11011 Torture"
+            },
+            "110120":{
+                "en":"11012 Piracy"
+            },
+            "110130":{
+                "en":"11013 War crimes"
+            },
+            "110131":{
+                "en":"110131 Unlawfully killing, causing or intending to cause death or serious injury associated with armed conflict"
+            },
+            "110132":{
+                "en":"110132 Unlawful destruction or damage to property associated with armed conflict"
+            },
+            "110133":{
+                "en":"110133 Sexual violence associated with armed conflict"
+            },
+            "110134":{
+                "en":"110134 Acts against liberty or human dignity associated with armed conflict"
+            },
+            "110135":{
+                "en":"110135 Conscripting or enlisting child soldiers"
+            },
+            "110139":{
+                "en":"110139 Other war crimes"
+            },
+            "110140":{
+                "en":"11014 Genocide"
+            },
+            "110150":{
+                "en":"11015 Crimes against humanity"
+            },
+            "110160":{
+                "en":"11016 Crime of aggression"
+            },
+            "110190":{
+                "en":"11019 Other acts under universal jurisdiction"
+            },
+            "110200":{
+                "en":"1102 Acts contrary to youth regulations and acts on minors"
+            },
+            "110210":{
+                "en":"11021 Status offences"
+            },
+            "110290":{
+                "en":"11029 Other acts contrary to youth regulations and acts on minors"
+            },
+            "110900":{
+                "en":"1109 Other criminal acts not elsewhere classified"
+            },
+            "SSS":{
+                "en":"Total"
+            },
+            "010000":{
+                "en":"01 Acts leading to death or intending to cause death"
+            },
+            "010100":{
+                "en":"0101 Intentional homicide"
+            },
+            "010200":{
+                "en":"0102 Attempted intentional homicide"
+            },
+            "010300":{
+                "en":"0103 Non-intentional homicide"
+            },
+            "010310":{
+                "en":"01031 Non-negligent manslaughter"
+            },
+            "010320":{
+                "en":"01032 Negligent manslaughter"
+            },
+            "010321":{
+                "en":"010321 Vehicular homicide"
+            },
+            "010322":{
+                "en":"010322 Non-vehicular homicide"
+            },
+            "010400":{
+                "en":"0104 Assisting or instigating suicide"
+            },
+            "010410":{
+                "en":"01041 Assisting suicide"
+            },
+            "010490":{
+                "en":"01049 Other acts of assisting or instigating suicide"
+            },
+            "010500":{
+                "en":"0105 Euthanasia"
+            },
+            "010600":{
+                "en":"0106 Illegal feticide"
+            },
+            "010700":{
+                "en":"0107 Unlawful killing associated with armed conflict"
+            },
+            "010900":{
+                "en":"0109 Other acts leading to death or intending to cause death"
+            },
+            "020000":{
+                "en":"02 Acts causing harm or intending to cause harm to the person"
+            },
+            "020100":{
+                "en":"0201 Assaults and threats"
+            },
+            "020110":{
+                "en":"02011 Assault"
+            },
+            "020111":{
+                "en":"020111 Serious assault"
+            },
+            "020112":{
+                "en":"020112 Minor assault"
+            },
+            "020120":{
+                "en":"02012 Threat"
+            },
+            "020121":{
+                "en":"020121 Serious threat"
+            },
+            "020122":{
+                "en":"020122 Minor threat"
+            },
+            "020190":{
+                "en":"02019 Other assaults or threats"
+            },
+            "020200":{
+                "en":"0202 Acts against liberty"
+            },
+            "020210":{
+                "en":"02021 Abduction of a minor"
+            },
+            "020211":{
+                "en":"020211 Parental abduction"
+            },
+            "020212":{
+                "en":"020212 Abduction by another family member"
+            },
+            "020213":{
+                "en":"020213 Abduction by a legal guardian"
+            },
+            "020219":{
+                "en":"020219 Other abduction of a minor"
+            },
+            "020220":{
+                "en":"02022 Deprivation of liberty"
+            },
+            "020221":{
+                "en":"020221 Kidnapping"
+            },
+            "020222":{
+                "en":"020222 Illegal restraint"
+            },
+            "020223":{
+                "en":"020223 Hijacking"
+            },
+            "020229":{
+                "en":"020229 Other deprivation of liberty"
+            },
+            "020290":{
+                "en":"02029 Other acts against liberty"
+            },
+            "020291":{
+                "en":"020291 Illegal adoption"
+            },
+            "020292":{
+                "en":"020292 Forced marriage"
+            },
+            "020299":{
+                "en":"020299 Other acts against liberty"
+            },
+            "020300":{
+                "en":"0203 Slavery and exploitation"
+            },
+            "020310":{
+                "en":"02031 Slavery"
+            },
+            "020320":{
+                "en":"02032 Forced labour"
+            },
+            "020321":{
+                "en":"020321 Forced labour for domestic services"
+            },
+            "020322":{
+                "en":"020322 Forced labour for industrial services"
+            },
+            "020323":{
+                "en":"020323 Forced labour for the State or armed forces"
+            },
+            "020329":{
+                "en":"020329 Other forced labour"
+            },
+            "020390":{
+                "en":"02039 Other acts of slavery and exploitation"
+            },
+            "020400":{
+                "en":"0204 Trafficking in persons (TIP)"
+            },
+            "020410":{
+                "en":"02041 TIP for sexual exploitation"
+            },
+            "020420":{
+                "en":"02042 TIP for forced labour or services"
+            },
+            "020430":{
+                "en":"02043 TIP for organ removal"
+            },
+            "020490":{
+                "en":"02049 TIP for other purposes"
+            },
+            "020500":{
+                "en":"0205 Coercion"
+            },
+            "020510":{
+                "en":"02051 Extortion or blackmail"
+            },
+            "020590":{
+                "en":"02059 Other acts of coercion"
+            },
+            "020600":{
+                "en":"0206 Negligence"
+            },
+            "020610":{
+                "en":"02061 Negligence in situations of persons under care"
+            },
+            "020611":{
+                "en":"020611 Negligence in situations of children under care"
+            },
+            "020612":{
+                "en":"020612 Negligence in situations of other dependent persons under care"
+            },
+            "020619":{
+                "en":"020619 Other negligence in situations of persons under care"
+            },
+            "020620":{
+                "en":"02062 Professional negligence"
+            },
+            "020630":{
+                "en":"02063 Negligence related to driving a vehicle"
+            },
+            "020690":{
+                "en":"02069 Other acts of negligence"
+            },
+            "020700":{
+                "en":"0207 Dangerous acts"
+            },
+            "020710":{
+                "en":"02071 Acts that endanger health"
+            },
+            "020720":{
+                "en":"02072 Operating a vehicle under the influence of psychoactive substances"
+            },
+            "020721":{
+                "en":"020721 Operating a vehicle under the influence of alcohol"
+            },
+            "020722":{
+                "en":"020722 Operating a vehicle under the influence of illicit drugs"
+            },
+            "020729":{
+                "en":"020729 Operating a vehicle under the influence of other psychoactive substances"
+            },
+            "020790":{
+                "en":"02079 Other dangerous acts"
+            },
+            "020800":{
+                "en":"0208 Acts intended to induce fear or emotional distress"
+            },
+            "020810":{
+                "en":"02081 Harassment"
+            },
+            "020811":{
+                "en":"020811 Harassment in the workplace"
+            },
+            "020819":{
+                "en":"020819 Other harassment"
+            },
+            "020820":{
+                "en":"02082 Stalking"
+            },
+            "020890":{
+                "en":"02089 Other acts intended to induce fear or emotional distress"
+            },
+            "020900":{
+                "en":"0209 Defamation or insult"
+            },
+            "020910":{
+                "en":"02091 Defamation or insult due to the victims characteristics or ascribed attributes"
+            },
+            "020920":{
+                "en":"02092 Defamation or insult due to the victims ascribed beliefs or values"
+            },
+            "020990":{
+                "en":"02099 Other defamation or insult"
+            },
+            "021000":{
+                "en":"0210 Discrimination"
+            },
+            "021010":{
+                "en":"02101 Personal discrimination"
+            },
+            "021020":{
+                "en":"02102 Group discrimination"
+            },
+            "021090":{
+                "en":"02109 Other discrimination"
+            },
+            "021100":{
+                "en":"0211 Acts that trespass against the person"
+            },
+            "021110":{
+                "en":"02111 Invasion of privacy"
+            },
+            "021190":{
+                "en":"02119 Other acts that trespass against the person"
+            },
+            "021900":{
+                "en":"0219 Other acts causing harm or intending to cause harm to the person"
+            },
+            "030000":{
+                "en":"03 Injurious acts of a sexual nature"
+            },
+            "030100":{
+                "en":"0301 Sexual violence"
+            },
+            "030110":{
+                "en":"03011 Rape"
+            },
+            "030111":{
+                "en":"030111 Rape with force"
+            },
+            "030112":{
+                "en":"030112 Rape without force"
+            },
+            "030113":{
+                "en":"030113 Statutory rape"
+            },
+            "030119":{
+                "en":"030119 Other rape"
+            },
+            "030120":{
+                "en":"03012 Sexual assault"
+            },
+            "030121":{
+                "en":"030121 Physical sexual assault"
+            },
+            "030122":{
+                "en":"030122 Non-physical sexual assault"
+            },
+            "030129":{
+                "en":"030129 Other sexual assault not elsewhere classified"
+            },
+            "030190":{
+                "en":"03019 Other acts of sexual violence"
+            },
+            "030200":{
+                "en":"0302 Sexual exploitation"
+            },
+            "030210":{
+                "en":"03021 Sexual exploitation of adults"
+            },
+            "030220":{
+                "en":"03022 Sexual exploitation of children"
+            },
+            "030221":{
+                "en":"030221 Child pornography"
+            },
+            "030222":{
+                "en":"030222 Child prostitution"
+            },
+            "030223":{
+                "en":"030223 Sexual grooming of children"
+            },
+            "030229":{
+                "en":"030229 Other sexual exploitation of children"
+            },
+            "030290":{
+                "en":"03029 Other acts of sexual exploitation"
+            },
+            "030900":{
+                "en":"0309 Other injurious acts of a sexual nature"
+            },
+            "040000":{
+                "en":"04 Acts against property involving violence or threat against a person"
+            },
+            "040100":{
+                "en":"0401 Robbery"
+            },
+            "040110":{
+                "en":"04011 Robbery from the person"
+            },
+            "040111":{
+                "en":"040111 Robbery from the person in a public location"
+            },
+            "040112":{
+                "en":"040112 Robbery from the person in a private location"
+            },
+            "040119":{
+                "en":"040119 Other robbery from the person"
+            },
+            "040120":{
+                "en":"04012 Robbery of valuables or goods in transit"
+            },
+            "040121":{
+                "en":"040121 Robbery of a car or vehicle"
+            },
+            "040129":{
+                "en":"040129 Other robbery of valuables or goods in transit"
+            },
+            "040130":{
+                "en":"04013 Robbery of an establishment or institution"
+            },
+            "040131":{
+                "en":"040131 Robbery of a financial institution"
+            },
+            "040132":{
+                "en":"040132 Robbery of a non-financial institution"
+            },
+            "040140":{
+                "en":"04014 Robbery of livestock"
+            },
+            "040190":{
+                "en":"04019 Other acts of robbery"
+            },
+            "040900":{
+                "en":"0409 Other acts against property involving violence or threat against a person"
+            },
+            "050000":{
+                "en":"05 Acts against property only"
+            },
+            "050100":{
+                "en":"0501 Burglary"
+            },
+            "050110":{
+                "en":"05011 Burglary of business premises"
+            },
+            "050120":{
+                "en":"05012 Burglary of private residential premises"
+            },
+            "050121":{
+                "en":"050121 Burglary of permanent private residences"
+            },
+            "050122":{
+                "en":"050122 Burglary of non-permanent private residences"
+            },
+            "050130":{
+                "en":"05013 Burglary of public premises"
+            },
+            "050190":{
+                "en":"05019 Other acts of burglary"
+            },
+            "050200":{
+                "en":"0502 Theft"
+            },
+            "050210":{
+                "en":"05021 Theft of a motorized vehicle or parts thereof"
+            },
+            "050211":{
+                "en":"050211 Theft of a motorized land vehicle"
+            },
+            "050212":{
+                "en":"050212 Illegal use of a motorized land vehicle"
+            },
+            "050213":{
+                "en":"050213 Theft of parts of a motorized land vehicle"
+            },
+            "050219":{
+                "en":"050219 Other theft of a motorized vehicle or parts thereof"
+            },
+            "050220":{
+                "en":"05022 Theft of personal property"
+            },
+            "050221":{
+                "en":"050221 Theft of personal property from a person"
+            },
+            "050222":{
+                "en":"050222 Theft of personal property from a vehicle"
+            },
+            "050229":{
+                "en":"050229 Other theft of personal property"
+            },
+            "050230":{
+                "en":"05023 Theft of business property"
+            },
+            "050231":{
+                "en":"050231 Theft from a shop"
+            },
+            "050239":{
+                "en":"050239 Other theft of business property"
+            },
+            "050240":{
+                "en":"05024 Theft of public property"
+            },
+            "050250":{
+                "en":"05025 Theft of livestock"
+            },
+            "050260":{
+                "en":"05026 Theft of services"
+            },
+            "050290":{
+                "en":"05029 Other acts of theft"
+            },
+            "050300":{
+                "en":"0503 Intellectual property offences"
+            },
+            "050400":{
+                "en":"0504 Property damage"
+            },
+            "050410":{
+                "en":"05041 Damage of public property"
+            },
+            "050420":{
+                "en":"05042 Damage of personal property"
+            },
+            "050430":{
+                "en":"05043 Damage of business property"
+            },
+            "050490":{
+                "en":"05049 Other damage of property"
+            },
+            "050900":{
+                "en":"0509 Other acts against property only"
+            },
+            "060000":{
+                "en":"06 Acts involving controlled drugs or other psychoactive substances"
+            },
+            "060100":{
+                "en":"0601 Unlawful acts involving controlled drugs or precursors"
+            },
+            "060110":{
+                "en":"06011 Unlawful possession, purchase, use, cultivation or production of controlled drugs for personal consumption"
+            },
+            "060111":{
+                "en":"060111 Unlawful possession, purchase or use of controlled drugs for personal consumption"
+            },
+            "060112":{
+                "en":"060112 Unlawful cultivation or production of controlled drugs for personal consumption"
+            },
+            "060120":{
+                "en":"06012 Unlawful trafficking, cultivation or production of controlled drugs or precursors not for personal consumption"
+            },
+            "060121":{
+                "en":"060121 Unlawful trafficking of controlled drugs not for personal consumption"
+            },
+            "060122":{
+                "en":"060122 Unlawful manufacture of controlled drugs not for personal consumption"
+            },
+            "060123":{
+                "en":"060123 Unlawful cultivation of controlled drugs not for personal consumption"
+            },
+            "060124":{
+                "en":"060124 Unlawful diversion of precursors not for personal consumption"
+            },
+            "060129":{
+                "en":"060129 Other unlawful trafficking, cultivation or production of controlled drugs or precursors not for personal consumption"
+            },
+            "060190":{
+                "en":"06019 Other unlawful acts involving controlled drugs or precursors"
+            },
+            "060200":{
+                "en":"0602 Unlawful acts involving alcohol, tobacco or other controlled substances"
+            },
+            "060210":{
+                "en":"06021 Unlawful production, handling, possession or use of alcohol products"
+            },
+            "060211":{
+                "en":"060211 Unlawful possession or use of alcohol products"
+            },
+            "060212":{
+                "en":"060212 Unlawful production, trafficking or distribution of alcohol products"
+            },
+            "060219":{
+                "en":"060219 Other unlawful production, handling, possession or use of alcohol products"
+            },
+            "060220":{
+                "en":"06022 Unlawful production, handling, possession or use of tobacco products"
+            },
+            "060221":{
+                "en":"060221 Unlawful possession or use of tobacco products"
+            },
+            "060222":{
+                "en":"060222 Unlawful production, trafficking or distribution of tobacco products"
+            },
+            "060229":{
+                "en":"060229 Other unlawful production, handling, possession or use of tobacco products"
+            },
+            "060290":{
+                "en":"06029 Other unlawful acts involving alcohol, tobacco or other controlled substances"
+            },
+            "060900":{
+                "en":"0609 Other acts involving controlled drugs or other psychoactive substances"
+            },
+            "070000":{
+                "en":"07 Acts involving fraud, deception or corruption"
+            },
+            "070100":{
+                "en":"0701 Fraud"
+            },
+            "070110":{
+                "en":"07011 Financial fraud"
+            },
+            "070111":{
+                "en":"070111 Financial fraud against the State"
+            },
+            "070112":{
+                "en":"070112 Financial fraud against natural or legal persons"
+            },
+            "070190":{
+                "en":"07019 Other acts of fraud"
+            },
+            "070200":{
+                "en":"0702 Forgery/counterfeiting"
+            },
+            "070210":{
+                "en":"07021 Counterfeiting means of payment"
+            },
+            "070211":{
+                "en":"070211 Counterfeiting means of cash payment"
+            },
+            "070212":{
+                "en":"070212 Counterfeiting means of non-cash payment"
+            },
+            "070220":{
+                "en":"07022 Counterfeit product offences"
+            },
+            "070230":{
+                "en":"07023 Acts of forgery/counterfeiting documents"
+            },
+            "070290":{
+                "en":"07029 Other acts of forgery/counterfeiting"
+            },
+            "070300":{
+                "en":"0703 Corruption"
+            },
+            "070310":{
+                "en":"07031 Bribery"
+            },
+            "070311":{
+                "en":"070311 Active bribery"
+            },
+            "070312":{
+                "en":"070312 Passive bribery"
+            },
+            "070320":{
+                "en":"07032 Embezzlement"
+            },
+            "070330":{
+                "en":"07033 Abuse of functions"
+            },
+            "070340":{
+                "en":"07034 Trading in influence"
+            },
+            "070350":{
+                "en":"07035 Illicit enrichment"
+            },
+            "070390":{
+                "en":"07039 Other acts of corruption"
+            },
+            "070400":{
+                "en":"0704 Acts involving the proceeds of crime"
+            },
+            "070410":{
+                "en":"07041 Money laundering"
+            },
+            "070420":{
+                "en":"07042 Illicit trafficking in cultural property"
+            },
+            "070490":{
+                "en":"07049 Other acts involving the proceeds of crime"
+            },
+            "080000":{
+                "en":"08 Acts against public order, authority and provisions of the State"
+            },
+            "080100":{
+                "en":"0801 Acts against public order behavioural standards"
+            },
+            "080110":{
+                "en":"08011 Violent public disorder offences"
+            },
+            "080120":{
+                "en":"08012 Acts related to social and religious public order norms and standards"
+            },
+            "080190":{
+                "en":"08019 Other acts against public order behavioural standards"
+            },
+            "080200":{
+                "en":"0802 Acts against public order sexual standards"
+            },
+            "080210":{
+                "en":"08021 Prostitution offences"
+            },
+            "080220":{
+                "en":"08022 Pornography offences"
+            },
+            "080290":{
+                "en":"08029 Other acts against public order sexual standards"
+            },
+            "080300":{
+                "en":"0803 Acts related to freedom of expression or control of expression"
+            },
+            "080310":{
+                "en":"08031 Acts against freedom of expression"
+            },
+            "080320":{
+                "en":"08032 Acts related to expressions of controlled social beliefs and norms"
+            },
+            "080321":{
+                "en":"080321 Violations of norms on religious beliefs/views"
+            },
+            "080322":{
+                "en":"080322 Violations of norms on intolerance and incitement to hatred"
+            },
+            "080329":{
+                "en":"080329 Other acts related to expressions of controlled social beliefs and norms"
+            },
+            "080390":{
+                "en":"08039 Other acts related to freedom of expression or control of expression"
+            },
+            "080400":{
+                "en":"0804 Acts contrary to public revenue or regulatory provisions"
+            },
+            "080410":{
+                "en":"08041 Acts against public revenue provisions"
+            },
+            "080420":{
+                "en":"08042 Acts against commercial or financial regulations"
+            },
+            "080430":{
+                "en":"08043 Acts against regulations on betting"
+            },
+            "080440":{
+                "en":"08044 Smuggling of goods"
+            },
+            "080450":{
+                "en":"08045 Market manipulations or insider trading"
+            },
+            "080490":{
+                "en":"08049 Other acts against public administration or regulatory provisions"
+            },
+            "080500":{
+                "en":"0805 Acts related to migration"
+            },
+            "080510":{
+                "en":"08051 Smuggling of migrants offences"
+            },
+            "080590":{
+                "en":"08059 Other unlawful acts related to migration"
+            },
+            "080600":{
+                "en":"0806 Acts against the justice system"
+            },
+            "080610":{
+                "en":"08061 Obstruction of justice"
+            },
+            "080620":{
+                "en":"08062 Breach of justice order"
+            },
+            "080630":{
+                "en":"08063 Criminal intent"
+            },
+            "080640":{
+                "en":"08064 Conspiracy"
+            },
+            "080690":{
+                "en":"08069 Other acts against the justice system"
+            },
+            "080700":{
+                "en":"0807 Acts related to democratic elections"
+            },
+            "080710":{
+                "en":"08071 Acts intended to unduly influence voters at elections"
+            },
+            "080790":{
+                "en":"08079 Other acts related to democratic elections"
+            },
+            "080800":{
+                "en":"0808 Acts contrary to labour law"
+            },
+            "080810":{
+                "en":"08081 Collective labour law violations"
+            },
+            "080820":{
+                "en":"08082 Individual labour law violations"
+            },
+            "080900":{
+                "en":"0809 Other acts against public order, authority and provisions of the State"
+            },
+            "090000":{
+                "en":"09 Acts against public safety and state security"
+            },
+            "090100":{
+                "en":"0901 Acts involving weapons, explosives and other destructive materials"
+            },
+            "090110":{
+                "en":"09011 Possession or use of weapons and explosives"
+            },
+            "090111":{
+                "en":"090111 Unlawful possession or use of firearms"
+            },
+            "090112":{
+                "en":"090112 Unlawful possession or use of other weapons or explosives"
+            },
+            "090113":{
+                "en":"090113 Unlawful possession or use of chemical, biological or radioactive materials"
+            },
+            "090119":{
+                "en":"090119 Other acts related to possession or use of weapons and explosives"
+            },
+            "090120":{
+                "en":"09012 Trafficking of weapons and explosives"
+            },
+            "090121":{
+                "en":"090121 Trafficking of firearms"
+            },
+            "090122":{
+                "en":"090122 Trafficking of other weapons or explosives"
+            },
+            "090123":{
+                "en":"090123 Trafficking of chemical, biological or radioactive materials"
+            },
+            "090129":{
+                "en":"090129 Other acts related to trafficking of weapons and explosives"
+            },
+            "090190":{
+                "en":"09019 Other acts relating to weapons and explosives"
+            },
+            "090200":{
+                "en":"0902 Acts against health and safety"
+            },
+            "090210":{
+                "en":"09021 Acts against health and safety at work"
+            },
+            "090290":{
+                "en":"09029 Other acts against health and safety"
+            },
+            "090300":{
+                "en":"0903 Acts against computer systems"
+            },
+            "090310":{
+                "en":"09031 Unlawful access to a computer system"
+            },
+            "090320":{
+                "en":"09032 Unlawful interference with a computer system or computer data"
+            },
+            "090321":{
+                "en":"090321 Unlawful interference with a computer system"
+            },
+            "090322":{
+                "en":"090322 Unlawful interference with computer data"
+            },
+            "090330":{
+                "en":"09033 Unlawful interception or access of computer data"
+            },
+            "090390":{
+                "en":"09039 Other acts against computer systems"
+            },
+            "090400":{
+                "en":"0904 Acts against state security"
+            },
+            "090500":{
+                "en":"0905 Acts related to an organized criminal group"
+            },
+            "090510":{
+                "en":"09051 Participation in an organized criminal group"
+            },
+            "090590":{
+                "en":"09059 Other acts related to an organized criminal group"
+            },
+            "090600":{
+                "en":"0906 Terrorism"
+            },
+            "090610":{
+                "en":"09061 Participation in a terrorist group"
+            },
+            "090620":{
+                "en":"09062 Financing of terrorism"
+            },
+            "090690":{
+                "en":"09069 Other acts related to the activities of a terrorist group"
+            },
+            "090700":{
+                "en":"0907 Non-injurious traffic violations"
+            },
+            "090900":{
+                "en":"0909 Other acts against public safety and state security"
+            }
+            };
+        await source.save(source.datafile, JSON.stringify(data, null, 2));
+        await source.index(data);
+    }
+}
