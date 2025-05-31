@@ -1,6 +1,6 @@
 {
     "name": "@cxe/data",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "description": "aggregated datasets and utilities",
     "keywords": [
         "data",
@@ -10,7 +10,9 @@
         "timezone",
         "language",
         "currency",
-        "crime"
+        "crime",
+        "json",
+        "yaml"
     ],
     "author": "Ian Carter <dev@cxe.io>",
     "license": "MIT",

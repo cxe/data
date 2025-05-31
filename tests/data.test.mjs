@@ -24,14 +24,25 @@ describe('data', ()=>{
         });
     });
 
-    describe.skip('JS', ()=>{
-        it('should create a Data object that stringifies to JavaScript', ()=>{
+    describe('JS', ()=>{
+        it('should create a Data object accepting JSON input and stringifies to JavaScript', ()=>{
             const json = '{"foo":"bar"}';
             const data = new JS(json);
             expect(data).toBeInstanceOf(Data);
             expect(data).toBeInstanceOf(JS);
-            expect(data.zero).toBe(0);
-            expect(String(data).replace(/\s/g, '')).toBe(json);
+            expect(String(data).replace(/\s/g, '')).toBe("{foo:'bar'}");
+        });
+        it('should accept JS', ()=>{
+            const data = new JS({foo: 1+2, baz(){}, '-': -1});
+            expect(JSON.stringify(data)).toBe('{"foo":3,"-":-1}');
+        });
+        it('should accept non-object input', ()=>{
+            expect(`${ new JS(null) }`).toBe('null');
+        });
+        it('should accept arrays', ()=>{
+            expect(`${ new JS([]) }`).toBe('[]');
+            expect(`${ new JS([1,2]) }`.replace(/\s/g, '')).toBe('[1,2]');
+            expect(`${ new JS([1,'2']) }`.replace(/\s/g, '')).toBe("[1,'2']");
         });
     });
 });

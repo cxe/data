@@ -90,7 +90,6 @@ export class JS extends Data{
 
     constructor(data) {
         super(data);
-        // todo verify
         switch (typeof data) {
             case 'string':
                 try {
@@ -106,14 +105,19 @@ export class JS extends Data{
             default:
                 this.#data = data;
         }
-        if (this.#data instanceof Object) { 
+        if (this.#data instanceof Object && !Array.isArray(this.#data)) { 
             Object.assign(this, this.#data);
             this.#data = this;
         }
     }
 
+    get [Symbol.toStringTag]() {
+        return 'JS';
+    }
+
     toString() {
-        return inspect(this.#data === undefined ? this : this.#data, {
+        const IGNORE_REGEX = /^(JS|Object) /;
+        let s = inspect(this.#data === undefined ? this : this.#data, {
             showHidden: false,
             depth: Infinity,
             colors: false,
@@ -129,7 +133,25 @@ export class JS extends Data{
             indentationStyle: 'tab',
             ...this.#conf
         });
+        const i = s.indexOf('{');
+        if (i < 0) return s;
+        const className = s.slice(0, i);
+        s = s.slice(i);
+        if (className.match(IGNORE_REGEX)) return s
+        return `/* ${className} */ ${s}`;
     }
+}
+
+
+export function getPrototypeChain(obj) {
+    const chain = [];
+    let current = obj;
+    while (current) {
+        const ctorName = current.constructor?.name || '(anonymous)';
+        chain.unshift(ctorName);
+        current = Object.getPrototypeOf(current);
+    }
+    return chain;
 }
 
 
